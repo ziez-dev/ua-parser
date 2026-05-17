@@ -5,7 +5,7 @@ pub fn build(b: *std.Build) void {
     const optimize = b.standardOptimizeOption(.{});
 
     // --- PCRE2 C library (vendored) ---
-    const pcre2_source_root = b.path("include/pcre2");
+    const pcre2_source_root = b.path("include");
     const pcre2_generated_headers = b.addWriteFiles();
     const pcre2_include = pcre2_generated_headers.getDirectory();
     _ = pcre2_generated_headers.addCopyFile(pcre2_source_root.path(b, "pcre2.h.generic"), "pcre2.h");
@@ -70,15 +70,15 @@ pub fn build(b: *std.Build) void {
     // --- PCRE2 Zig module (via translate-c) ---
     const pcre2_mod = blk: {
         const pcre2_translate = b.addTranslateC(.{
-            .root_source_file = pcre2_source_root.path(b, "pcre2.h.generic"),
+            .root_source_file = pcre2_include.path(b, "pcre2.h"),
             .target = target,
             .optimize = optimize,
         });
         pcre2_translate.addIncludePath(pcre2_include);
         pcre2_translate.addIncludePath(pcre2_source_root);
-        pcre2_translate.addCMacro("HAVE_CONFIG_H", "1");
-        pcre2_translate.addCMacro("PCRE2_CODE_UNIT_WIDTH", "8");
-        pcre2_translate.addCMacro("PCRE2_STATIC", "1");
+        pcre2_translate.defineCMacro("HAVE_CONFIG_H", "1");
+        pcre2_translate.defineCMacro("PCRE2_CODE_UNIT_WIDTH", "8");
+        pcre2_translate.defineCMacro("PCRE2_STATIC", "1");
         break :blk pcre2_translate.createModule();
     };
 

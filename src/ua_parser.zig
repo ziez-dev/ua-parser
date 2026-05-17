@@ -4,11 +4,7 @@
 const std = @import("std");
 const tables = @import("ua_parser_tables.zig");
 const extension_tables = @import("ua_parser_extension_tables.zig");
-
-const c = @cImport({
-    @cDefine("PCRE2_CODE_UNIT_WIDTH", "8");
-    @cInclude("pcre2.h");
-});
+const c = @import("pcre2");
 
 pub const VERSION = "2.0.9";
 pub const UA_MAX_LENGTH = 500;

@@ -1,0 +1,7 @@
+.{
+    .name = .@"ziez-ua-parser",
+    .version = "0.1.0",
+    .minimum_zig_version = "0.16.0",
+    .dependencies = .{},
+    .paths = .{ "src", "include", "tests", "build.zig", "build.zig.zon" },
+}
